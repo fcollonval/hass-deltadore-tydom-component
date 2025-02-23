@@ -703,6 +703,14 @@ class TydomClient:
         except BaseException:
             LOGGER.error("put_alarm_cdata ERROR !", exc_info=True)
 
+    async def put_ackevents_cdata(self, device_id, endpoint_id=None, alarm_pin=None):
+        """Acknowledge the alarm events."""
+        # PUT /devices/xxxx/endpoints/xxxx/cdata?name=ackEventCmd HTTP/1.1 {"pwd":"xxxxxx"}
+        pwd = alarm_pin or self._alarm_pin
+        if pwd is None:
+            LOGGER.warning("Tydom alarm pin is not set!")
+        await self.put_data(f"/devices/{device_id}/endpoints/{endpoint_id}/cdata?name=ackEventCmd", "pwd", pwd)
+
     async def update_firmware(self):
         """Update Tydom firmware."""
         msg_type = "/configs/gateway/update"

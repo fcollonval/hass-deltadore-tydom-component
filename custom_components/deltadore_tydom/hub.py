@@ -32,6 +32,7 @@ from .ha_entities import (
     HaGarage,
     HaLight,
     HaAlarm,
+    HaButtonAckAlarmEvent,
 )
 
 from .const import LOGGER
@@ -71,6 +72,7 @@ class Hub:
         self._id = "Tydom-" + mac[6:]
         self.devices = {}
         self.ha_devices = {}
+        self.add_button_callback = None
         self.add_cover_callback = None
         self.add_sensor_callback = None
         self.add_climate_callback = None
@@ -255,7 +257,8 @@ class Hub:
                 self.ha_devices[device.device_id] = ha_device
                 if self.add_alarm_callback is not None:
                     self.add_alarm_callback([ha_device])
-
+                if self.add_button_callback is not None:
+                    self.add_button_callback([HaButtonAckAlarmEvent(device)])
                 if self.add_sensor_callback is not None:
                     self.add_sensor_callback(ha_device.get_sensors())
             case _:

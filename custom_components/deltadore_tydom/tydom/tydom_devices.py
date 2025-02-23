@@ -328,3 +328,7 @@ class TydomAlarm(TydomDevice):
         """Arm home alarm."""
         await self._tydom_client.put_alarm_cdata(self._id, self._endpoint, code, "ON", self._tydom_client._zone_home, self.is_legacy_alarm())
         # self._tydom_client.add_poll_device_url_1s(f"/devices/{self._id}/endpoints/{self._endpoint}/cdata")
+
+    async def acknowledge_events(self, code) -> None:
+        """Acknowledge alarm events."""
+        await self._tydom_client.put_ackevents_cdata(self._id, self._endpoint, code)
